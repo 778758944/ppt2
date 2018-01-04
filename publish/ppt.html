@@ -1,0 +1,145 @@
+<!--
+    Powered By nodeppt - This is probably the best web presentation tool so far!
+    version: 1.4.5
+    site: https://github.com/ksky521/nodeppt
+    date: 
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>nodeppt markdown 演示 - By 邢文涛</title>
+    <link rel="stylesheet" media="all" href="./css/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./css/phone.css">
+    
+    <link rel="stylesheet" href="./js/highlight/styles/monokai_sublime.css">
+    <link rel="stylesheet" href="./css/font-awesome.css">
+    
+<link rel="stylesheet" href="./css/theme.moon.css">
+</head>
+<body>
+<div class="slides">
+    <slides id="container">
+        <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>WebAssembly</h1>
+<h2>天下武功 唯快不破</h2>
+
+</article></section></slide>
+<slide class="slide fill" style="background-image:url('./img/bg1.png')"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>什么是WebAssembly</h1>
+<h2>WebAssembly 是除了 JavaScript 以外，另一种可以在浏览器中执行的语言</h2>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>两种新文件</h2>
+<ol>
+<li>wasm文件：最终浏览器加载的文件，是一种字节码文件，可以由asmjs,C,wast文件生成，浏览器加载wasm后可以迅速编译成机器码</li>
+<li>wast文件：wasm对等文本描述文件，有特定的语法（s表达式），可以直接生成wasm文件</li>
+</ol>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>编译与加载</h1>
+<h2>编译（以C --&gt; wasm为例）</h2>
+<ol>
+<li>目前对WebAssembly支持最好的是llvm的编译链工具，通过前端clang把C编译为中间代码(LLVM-IR)，在由后端编译器在编译成wasm(后端编译器目前还在开发中)</li>
+<li>Emscripten。它通过自己的后端先把中间代码（LLVM-IR）转换成自己的中间代码（叫做 asm.js），然后再转化成 WebAssembly。实际上它背后也是使用的 LLVM</li>
+</ol>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>加载</h2>
+<ol>
+<li>首先通过fetch api加载wasm文件，加载完成将数据转化为arrayBuffer</li>
+<li>在支持WebAssembly的浏览器上，通过WebAssembly.compile可以从arrayBuffer生成WebAssembly.Module, WebAssembly.Instance可以将module实例化，在实例化后就可以访问C中定义的变量和函数</li>
+</ol>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>WebAssembly 为什么可以这么快</h1>
+<ol>
+<li>文件抓取阶段，WebAssembly 比 JavaScript 抓取文件更快。即使 JavaScript 进行了压缩，WebAssembly 文件的体积也比 JavaScript 更小</li>
+<li>解析阶段，WebAssembly 的解码时间比 JavaScript 的解析时间更短；</li>
+<li>编译优化，以C为例，在C转化为wasm过程中，llvm已经作了优化。此外，WebAssembly只支持数字类型的变量，因此不需要根据变量类型的不同编以成多个版本</li>
+</ol>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>demo</h2>
+
+</article></section></slide>
+        
+
+        <!-- <slide class="slide logoslide dark nobackground">
+            <article class="flexbox vcenter">
+                <h2 style="color: white;">Powered By nodeppt v1.4.5</h2>
+            </article>
+        </slide> -->
+        <div class="slideTip" id="tip"></div>
+    </slides>
+</div>
+<canvas id="drawBoard" class="draw-board" width="900" height="700"></canvas>
+<div class="progress"><span id="progress"></span></div>
+<div id="_buttons">
+    <div class="_btn-box" id="_btn-box" style="display:none;">
+        <button class="fa fa-arrow-circle-left" id="_btn-prev"></button>
+        <button class="fa fa-arrow-circle-right" id="_btn-next"></button>
+        <button class="fa fa-paint-brush" id="_btn-brush"></button>
+        <button class="fa fa-compress" id="_btn-overview" data-toggle="fa fa-expand"></button>
+    </div>
+    <button class="fa fa-bars" id="_btn-bar"  data-toggle="fa fa-close"></button>
+</div>
+<script src="./js/mixjs/lib/mix.0.3.0.min.js"></script>
+<script>
+    var ASSET_RELATIVE_DIR = ".";
+</script>
+<script>
+var base = location.protocol + '//' + location.host;
+
+var path = (location.pathname + '#').split('/').filter(function(v){
+    return !!v;
+});
+path.pop();
+path = path.join('/');
+if (typeof ASSET_RELATIVE_DIR === 'string') {
+    path = path + '/' + ASSET_RELATIVE_DIR;
+}
+MixJS.config({
+    baseURL: [ base, path, 'js'].join('/')+'/'
+});
+
+</script>
+<script src="./js/mixjs/lib/event/broadcast.js"></script>
+<script src="./js/nodeppt.js"></script>
+<script>
+Slide.init({
+    containerID: 'container',
+    drawBoardID: 'drawBoard',
+    slideClass: '.slide',
+    buildClass: '.build',
+    progressID: 'progress',
+    transition: 'move',
+    width: 1100,
+    dir: './',
+    
+    //打开下面的注释就开启postMessage方式
+    //访问网址127.0.0.1:8080/ppt/demo#client
+    control:{
+        type: 'postMessage',
+        args:{
+            isControl:  false
+        }
+    },
+    
+    tipID: 'tip'
+});
+MixJS.loadJS('highlight/highlight.pack.js',function(){
+    hljs.tabReplace = '  ';
+    hljs.initHighlightingOnLoad();
+});
+</script>
+
+
+<!--placeholder-->
+</body>
+</html>
