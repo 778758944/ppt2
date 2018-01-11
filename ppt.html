@@ -31,19 +31,44 @@
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article>
-<h2>两种新文件</h2>
 <ol>
-<li>wasm文件：最终浏览器加载的文件，是一种字节码文件，可以由asmjs,C,wast文件生成，浏览器加载wasm后可以迅速编译成机器码</li>
-<li>wast文件：wasm对等文本描述文件，有特定的语法（s表达式），可以直接生成wasm文件</li>
+<li>WebAssembly是高级语言在一定程度上的低级抽象，所以WebAssembly是高级语言的一种编译结果，而不是可以直接编写的高级语言。</li>
+<li>由高级语言编译而来的WebAssembly是二进制字节码文件，浏览器可以将这种字节码转化为本地代码执行。</li>
 </ol>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>编译与加载</h1>
-<h2>编译（以C --&gt; wasm为例）</h2>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>什么是编译</h1>
+<h2 style="text-align: left;">简单来说编译就是把一种语言翻译成另一种语言，对于编程来说，就是把高级语言翻译成机器码，因为存在许多不同的平台，所以会有多重编译结果，通常，编译器把由前端把高级语言先编译到中间代码，在根据平台的不同由后端编译器将高级语言编译为具体的机器码。</h2>
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<div>
+    <img src="./img/compile.png"/>
+</div><h2>那么，WebAssembly是在其中哪个阶段？</h2>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<div>
+    <img src="./img/compilewasm.png"/>
+</div><h2 style="text-align: left;">WebAssembly是中间代码到机器码过程的中间产物，中间代码不在直接编译成机器码，而是生成WebAssembly字节码，在通过浏览器编译成机器码。</h2>
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>编译工具</h1>
 <ol>
-<li>目前对WebAssembly支持最好的是llvm的编译链工具，通过前端clang把C编译为中间代码(LLVM-IR)，在由后端编译器在编译成wasm(后端编译器目前还在开发中)</li>
+<li>目前对WebAssembly支持最好的是llvm的编译链工具，通过前端clang把C编译为中间代码(LLVM-IR)，在由后端编译器编译成wasm(后端编译器目前还在开发中)</li>
 <li>Emscripten。它通过自己的后端先把中间代码（LLVM-IR）转换成自己的中间代码（叫做 asm.js），然后再转化成 WebAssembly。实际上它背后也是使用的 LLVM</li>
+</ol>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>编译结果</h1>
+<ol>
+<li>wasm文件：最终浏览器加载的文件，是一种字节码文件，可以由asmjs,C,wast文件生成，浏览器加载wasm后可以迅速编译成机器码</li>
+<li>wast文件：wasm对等文本描述文件，有特定的语法（s表达式），可以直接生成wasm文件</li>
 </ol>
 
 </article></section></slide>
@@ -56,7 +81,7 @@
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>WebAssembly 为什么可以这么快</h1>
+<h1>WebAssembly 为什么快</h1>
 <ol>
 <li>文件抓取阶段，WebAssembly 比 JavaScript 抓取文件更快。即使 JavaScript 进行了压缩，WebAssembly 文件的体积也比 JavaScript 更小</li>
 <li>解析阶段，WebAssembly 的解码时间比 JavaScript 的解析时间更短；</li>
@@ -67,6 +92,12 @@
 <slide class="slide"><section class="slide-wrapper"><article>
 <h2>demo 前端图像边缘识别不只是玩玩</h2>
 
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>总结</h1>
+<h3 style='text-align: center;'>
+    非科班出身的我曾经在大学里想自学C，结果看了两天书就放弃了，因为我当时无法理解为啥要区分字符，整数，浮点。。。搞的我非常不爽。后来接触了弱类型的js，变量随意赋值感觉很爽，并四处吹嘘js是最人性化的语言。时至今日我仍然认为js是最人性化的语言，但对于写代码要不要爽这件事，我觉得并不是很重要，重要的是让用户爽，如果不能让用户爽，至少也要让计算机爽。
+</h3>
 </article></section></slide>
         
 
